@@ -14,12 +14,12 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name = 'Exams-dates-scraper',
-    version = Exams-dates-scraper.__version__,
+    name = 'ExamsDatesScraper',
+    version = ExamsDatesScraper.__version__,
     description = 'A program to recuperate all your exams/homeworks dates 
                     from your Pixel/Laval university account',
     long_description = long_description,
-    url = 'http://github.com/luiseduardo1/Exam-dates-scraper',
+    url = 'http://github.com/luiseduardo1/ExamsDatesScraper',
     author = 'Luis Eduardo Obando',
     author_email = 'luiseduardo.obando@gmail.com'
     license = 'MIT',
