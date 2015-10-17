@@ -21,7 +21,7 @@ requirements = [
 long_description = readme
 setup(
     name = 'ExamsDatesScraper',
-    version = ExamsDatesScraper.__version__,
+    version = version,
     description = 'A program to recuperate all your exams/homeworks dates 
                     from your Pixel/Laval university account',
     long_description = long_description,
