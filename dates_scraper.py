@@ -14,7 +14,7 @@ import cookielib
 import getpass
 import re
 
-def evaluationsScraper()
+def evaluationsScraper():
     EXAMS = re.compile('Examens :')
     HOMEWORKS = re.compile('Travaux \w+')
     EXAM_HOMEWORK = re.compile('Intra|Final|Mini \w+|Examen [0-9]|'
