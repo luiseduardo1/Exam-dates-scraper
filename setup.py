@@ -8,11 +8,17 @@ try:
 except ImportError:
     from distutils.core import setup
 
-here = path.abspath(path.dirname(__file__))
+version = '1.0'
 
-with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
-    long_description = f.read()
+with open('README.md') as readme_file:
+    readme = read_file.read()
 
+requirements = [
+        'Beautifulsoup4>=4.4.1',
+        'Mechanize==0.2.5',
+        ]
+
+long_description = readme
 setup(
     name = 'ExamsDatesScraper',
     version = ExamsDatesScraper.__version__,
@@ -24,7 +30,5 @@ setup(
     author_email = 'luiseduardo.obando@gmail.com'
     license = 'MIT',
     packages = find_packages(),
-    install_requires = ['Beautifulsoup4>=4.4.1',
-                        'Mechanize==0.2.5'
-                        ],
+    install_requires = requirements 
 )
