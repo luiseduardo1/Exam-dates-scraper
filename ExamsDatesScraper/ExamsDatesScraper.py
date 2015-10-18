@@ -14,6 +14,10 @@ import cookielib
 import getpass
 import re
 
+import xlwt
+from FitSheetWrapper import FitSheetWrapper
+import itertools
+
 def evaluationsScraper():
     EXAMS = re.compile('Examens :')
     HOMEWORKS = re.compile('Travaux \w+')
@@ -32,7 +36,8 @@ def evaluationsScraper():
     cookieJar = cookielib.LWPCookieJar()
     browser.set_cookiejar(cookieJar)
 
-    # Login to your Pixel account
+    # Logging to your Pixel account
+    print ("Logging into your account ...")
     browser.open('https://pixel.fsg.ulaval.ca/')
     browser.select_form(name="form_login")
     browser['code_utilisateur'] = USERNAME 
@@ -110,8 +115,64 @@ def evaluationsScraper():
         courseCounter += 1
 
     print "The dates of your exams and homeworks have been well recuperated!"
+    return myCalendar
+
+def writeScheduleInExcel(calendar):
+
+    filename = 'ExamsCalendrier.xls'
+    myCalendar = calendar
+
+    book = xlwt.Workbook(encoding='utf-8')
+    sheet = book.add_sheet("Dates d'évaluation")
+
+    col1_width = 256 * 28     # 28 characters wide
+    col2_width = 256 * 15     # 15 characters wide
+    
+    try:
+        for i in itertools.count():
+            if (i == 0):
+                sheet.col(i).width = col1_width
+            else:
+                sheet.col(i).width = col2_width
+
+    except ValueError:
+        pass
+
+    col1_name = 'Évaluation:'
+    col2_name = 'Date:'
+    col3_name = 'Heure:'
+    col4_name = 'Pourcentage'
+
+    sheet.write(0,0, 'Université Laval')
+    sheet.write(1,0, 'Session: Automne 2015')
+
+
+    idxRow = 3
+    for course in myCalendar.coursesList:
+        courseName = course.getCourseName()
+        sheet.write(idxRow,0, 'Cours:'+ courseName)
+        idxRow += 1
+        sheet.write(idxRow,0, col1_name)
+        sheet.write(idxRow,1, col2_name)
+        sheet.write(idxRow,2, col3_name)
+        sheet.write(idxRow,3, col4_name)
+        idxRow += 1
+        
+        for exam in course.examsList:
+            examName = exam.getName()
+            sheet.write(idxRow,0, examName) 
+            idxRow += 1    
+        for homework in course.homeworksList:
+            hwName = homework.getName()
+            sheet.write(idxRow,0, hwName)
+            idxRow += 1
+
+        idxRow += 1
+
+    book.save(filename)
 
 
 if __name__ == '__main__':
-    evaluationsScraper()
+    myCalendar = evaluationsScraper()
+    writeScheduleInExcel(myCalendar);
 
