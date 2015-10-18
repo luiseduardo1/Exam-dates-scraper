@@ -15,7 +15,6 @@ import getpass
 import re
 
 import xlwt
-from FitSheetWrapper import FitSheetWrapper
 import itertools
 
 def evaluationsScraper():
@@ -117,6 +116,7 @@ def evaluationsScraper():
     print "The dates of your exams and homeworks have been well recuperated!"
     return myCalendar
 
+
 def writeScheduleInExcel(calendar):
 
     filename = 'ExamsCalendrier.xls'
@@ -144,8 +144,7 @@ def writeScheduleInExcel(calendar):
     col4_name = 'Pourcentage'
 
     sheet.write(0,0, 'Université Laval')
-    sheet.write(1,0, 'Session: Automne 2015')
-
+    sheet.write(1,0, 'Session: Automne 2015') #TODO : Write automatically the actual semester
 
     idxRow = 3
     for course in myCalendar.coursesList:
