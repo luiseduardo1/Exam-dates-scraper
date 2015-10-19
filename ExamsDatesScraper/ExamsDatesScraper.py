@@ -122,49 +122,67 @@ def writeScheduleInExcel(calendar):
     filename = 'ExamsCalendrier.xls'
     myCalendar = calendar
 
+    style0 = xlwt.easyxf('font:name Arial, color-index black, bold on')
+    style1 = xlwt.easyxf('font:name Arial, color-index blue, bold on')
     book = xlwt.Workbook(encoding='utf-8')
     sheet = book.add_sheet("Dates d'évaluation")
 
-    col1_width = 256 * 28     # 28 characters wide
-    col2_width = 256 * 15     # 15 characters wide
+    first_col_width = 256 * 32     # 32 characters wide
+    others_col_width = 256 * 15     # 15 characters wide
     
     try:
         for i in itertools.count():
             if (i == 0):
-                sheet.col(i).width = col1_width
+                sheet.col(i).width = first_col_width
             else:
-                sheet.col(i).width = col2_width
+                sheet.col(i).width = others_col_width
 
     except ValueError:
         pass
 
-    col1_name = 'Évaluation:'
-    col2_name = 'Date:'
-    col3_name = 'Heure:'
-    col4_name = 'Pourcentage'
+    col1_exam_name = 'Examens:'
+    col2_exam_name = 'Date:'
+    col3_exam_name = 'Heure:'
+    col1_hw_name = "Travaux d'évaluation: "
+    col2_hw_name = 'Date de remise:'
+    col3_hw_name = 'Heure de remise:'
 
-    sheet.write(0,0, 'Université Laval')
-    sheet.write(1,0, 'Session: Automne 2015') #TODO : Write automatically the actual semester
+    col4_name = 'Pourcentage' #TODO : Add pourcentage to exam/hw attributes
+
+    sheet.write(0,0, 'Université Laval', style0)
+    sheet.write(1,0, 'Session: Automne 2015', style0) #TODO : Write automatically the actual semester
 
     idxRow = 3
     for course in myCalendar.coursesList:
         courseName = course.getCourseName()
-        sheet.write(idxRow,0, 'Cours:'+ courseName)
+        sheet.write(idxRow,0, 'Cours: '+ courseName, style1)
         idxRow += 1
-        sheet.write(idxRow,0, col1_name)
-        sheet.write(idxRow,1, col2_name)
-        sheet.write(idxRow,2, col3_name)
-        sheet.write(idxRow,3, col4_name)
+        
+        sheet.write(idxRow,0, col1_exam_name, style0)
+        sheet.write(idxRow,1, col2_exam_name, style0)
+        sheet.write(idxRow,2, col3_exam_name, style0)
+        sheet.write(idxRow,3, col4_name, style0)
         idxRow += 1
         
         for exam in course.examsList:
-            examName = exam.getName()
-            sheet.write(idxRow,0, examName) 
-            idxRow += 1    
-        for homework in course.homeworksList:
-            hwName = homework.getName()
-            sheet.write(idxRow,0, hwName)
+            sheet.write(idxRow,0, exam.getName())
+            sheet.write(idxRow,1, exam.getDate())
+            sheet.write(idxRow,2, exam.getTimePeriod())
+            idxRow += 1 
+        
+        if course.homeworksList:
             idxRow += 1
+            sheet.write(idxRow,0, col1_hw_name, style0)
+            sheet.write(idxRow,1, col2_hw_name, style0)
+            sheet.write(idxRow,2, col3_hw_name, style0)
+            sheet.write(idxRow,3, col4_name, style0)
+            idxRow += 1
+
+            for homework in course.homeworksList:
+                sheet.write(idxRow,0, homework.getName())
+                sheet.write(idxRow,1, homework.getDueDate())
+                sheet.write(idxRow,2, homework.getDueHour())
+                idxRow += 1
 
         idxRow += 1
 
