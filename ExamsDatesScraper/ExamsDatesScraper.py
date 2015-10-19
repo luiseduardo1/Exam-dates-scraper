@@ -127,27 +127,27 @@ def writeScheduleInExcel(calendar):
     book = xlwt.Workbook(encoding='utf-8')
     sheet = book.add_sheet("Dates d'évaluation")
 
-    first_col_width = 256 * 32     # 32 characters wide
-    others_col_width = 256 * 15     # 15 characters wide
+    firstColWidth = 256 * 32     # 32 characters wide
+    othersColWidth = 256 * 15     # 15 characters wide
     
     try:
         for i in itertools.count():
             if (i == 0):
-                sheet.col(i).width = first_col_width
+                sheet.col(i).width = firstColWidth
             else:
-                sheet.col(i).width = others_col_width
+                sheet.col(i).width = othersColWidth
 
     except ValueError:
         pass
 
-    col1_exam_name = 'Examens:'
-    col2_exam_name = 'Date:'
-    col3_exam_name = 'Heure:'
-    col1_hw_name = "Travaux d'évaluation: "
-    col2_hw_name = 'Date de remise:'
-    col3_hw_name = 'Heure de remise:'
+    examCol1 = 'Examens:'
+    examCol2 = 'Date:'
+    examCol3 = 'Heure:'
+    homeworkCol1 = "Travaux d'évaluation: "
+    homeworkCol2 = 'Date de remise:'
+    homeworkCol3 = 'Heure de remise:'
 
-    col4_name = 'Pourcentage' #TODO : Add pourcentage to exam/hw attributes
+    col4 = 'Pourcentage' #TODO : Add pourcentage to exam/hw attributes
 
     sheet.write(0,0, 'Université Laval', style0)
     sheet.write(1,0, 'Session: Automne 2015', style0) #TODO : Write automatically the actual semester
@@ -158,10 +158,10 @@ def writeScheduleInExcel(calendar):
         sheet.write(idxRow,0, 'Cours: '+ courseName, style1)
         idxRow += 1
         
-        sheet.write(idxRow,0, col1_exam_name, style0)
-        sheet.write(idxRow,1, col2_exam_name, style0)
-        sheet.write(idxRow,2, col3_exam_name, style0)
-        sheet.write(idxRow,3, col4_name, style0)
+        sheet.write(idxRow,0, examCol1,style0)
+        sheet.write(idxRow,1, examCol2, style0)
+        sheet.write(idxRow,2, examCol3, style0)
+        sheet.write(idxRow,3, col4, style0)
         idxRow += 1
         
         for exam in course.examsList:
@@ -172,10 +172,10 @@ def writeScheduleInExcel(calendar):
         
         if course.homeworksList:
             idxRow += 1
-            sheet.write(idxRow,0, col1_hw_name, style0)
-            sheet.write(idxRow,1, col2_hw_name, style0)
-            sheet.write(idxRow,2, col3_hw_name, style0)
-            sheet.write(idxRow,3, col4_name, style0)
+            sheet.write(idxRow,0, homeworkCol1, style0)
+            sheet.write(idxRow,1, homeworkCol2, style0)
+            sheet.write(idxRow,2, homeworkCol3, style0)
+            sheet.write(idxRow,3, col4, style0)
             idxRow += 1
 
             for homework in course.homeworksList:
