@@ -86,10 +86,12 @@ def evaluationsScraper():
                         columnInfo = column.get_text(strip=True)
                         examsInfos.append(columnInfo)
 
+                # Getting name, date, period, value
                 for nbExam in range(examCounter):
                     exam = Exam.Exam(examsInfos[0+(nbExam)*16], 
                                      examsInfos[2+(nbExam)*16], 
-                                     examsInfos[3+(nbExam)*16])
+                                     examsInfos[3+(nbExam)*16],
+                                     examsInfos[10+(nbExam)*16])
                     myCourse.examsList.append(exam) 
 
             # Homeworks dates
@@ -103,10 +105,12 @@ def evaluationsScraper():
                         columnInfo = column.get_text(strip=True)
                         homeworksInfos.append(columnInfo)
 
+                # Getting name, date, period, value
                 for nbHomework in range(homeworkCounter):
                     homework = Homework.Homework(homeworksInfos[0+(nbHomework)*16], 
                                                  homeworksInfos[2+(nbHomework)*16], 
-                                                 homeworksInfos[3+(nbHomework)*16])
+                                                 homeworksInfos[3+(nbHomework)*16],
+                                                 homeworksInfos[11+(nbHomework)*16])
                     myCourse.homeworksList.append(homework) 
         
         # Adding each course with the dates in the calendar
@@ -146,8 +150,7 @@ def writeScheduleInExcel(calendar):
     homeworkCol1 = "Travaux d'évaluation: "
     homeworkCol2 = 'Date de remise:'
     homeworkCol3 = 'Heure de remise:'
-
-    col4 = 'Pourcentage' #TODO : Add pourcentage to exam/hw attributes
+    valueCol4 = 'Pourcentage' #TODO : Add pourcentage to exam/hw attributes
 
     sheet.write(0,0, 'Université Laval', style0)
     sheet.write(1,0, 'Session: Automne 2015', style0) #TODO : Write automatically the actual semester
@@ -161,13 +164,14 @@ def writeScheduleInExcel(calendar):
         sheet.write(idxRow,0, examCol1,style0)
         sheet.write(idxRow,1, examCol2, style0)
         sheet.write(idxRow,2, examCol3, style0)
-        sheet.write(idxRow,3, col4, style0)
+        sheet.write(idxRow,3, valueCol4, style0)
         idxRow += 1
         
         for exam in course.examsList:
             sheet.write(idxRow,0, exam.getName())
             sheet.write(idxRow,1, exam.getDate())
             sheet.write(idxRow,2, exam.getTimePeriod())
+            sheet.write(idxRow,3, exam.getValue())
             idxRow += 1 
         
         if course.homeworksList:
@@ -175,19 +179,21 @@ def writeScheduleInExcel(calendar):
             sheet.write(idxRow,0, homeworkCol1, style0)
             sheet.write(idxRow,1, homeworkCol2, style0)
             sheet.write(idxRow,2, homeworkCol3, style0)
-            sheet.write(idxRow,3, col4, style0)
+            sheet.write(idxRow,3, valueCol4, style0)
             idxRow += 1
+
 
             for homework in course.homeworksList:
                 sheet.write(idxRow,0, homework.getName())
                 sheet.write(idxRow,1, homework.getDueDate())
                 sheet.write(idxRow,2, homework.getDueHour())
+                sheet.write(idxRow,3, homework.getValue())
                 idxRow += 1
 
         idxRow += 1
 
     book.save(filename)
-
+    #print(myCalendar.coursesList[3].homeworksList[4].getName())
 
 if __name__ == '__main__':
     myCalendar = evaluationsScraper()
