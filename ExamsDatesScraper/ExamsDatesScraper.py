@@ -20,9 +20,9 @@ import itertools
 def evaluationsScraper():
     EXAMS = re.compile('Examens :')
     HOMEWORKS = re.compile('Travaux \w+')
-    EXAM_HOMEWORK = re.compile('Intra|Final|Mini \w+|Examen [0-9]|'
+    EXAM_HOMEWORK = re.compile('[Ii]ntra|Final|Mini \w+|Examen \S+|'
                                'T[pP] ?[0-9]|Rapport|Devoir|Livrable|'
-                               'Projet|Participation|Évaluation')
+                               'Projet|Participation|Travail|Évaluation')
 
     myCalendar = Calendar.Calendar()
     USERNAME = raw_input("Enter your IDUL: ")
