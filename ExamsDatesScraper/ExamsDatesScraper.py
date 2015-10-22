@@ -22,7 +22,7 @@ def evaluationsScraper():
     HOMEWORKS = re.compile('Travaux \w+')
     EXAM_HOMEWORK = re.compile('Intra|Final|Mini \w+|Examen [0-9]|'
                                'T[pP] ?[0-9]|Rapport|Devoir|Livrable|'
-                               'Projet|Participation')
+                               'Projet|Participation|Évaluation')
 
     myCalendar = Calendar.Calendar()
     USERNAME = raw_input("Enter your IDUL: ")
@@ -81,7 +81,8 @@ def evaluationsScraper():
                 for row in examsRows:
                     columns = row.find_all('td')
                     for column in columns:
-                        if re.match(EXAM_HOMEWORK, column.text):
+                       # Text is encoded in utf-8 so that the regex can work
+                        if re.match(EXAM_HOMEWORK, (column.text).encode('utf-8')):
                             examCounter += 1
                         columnInfo = column.get_text(strip=True)
                         examsInfos.append(columnInfo)
@@ -99,8 +100,9 @@ def evaluationsScraper():
                 homeworksRows = title.next_sibling.next_sibling.find_all('tr')
                 for row in homeworksRows:
                     columns = row.find_all('td')
-                    for column in columns:
-                        if re.match(EXAM_HOMEWORK, column.text):
+                    for column in columns:                            
+                       # Text is encoded in utf-8 so that the regex can work
+                        if re.match(EXAM_HOMEWORK, (column.text).encode('utf-8')):
                             homeworkCounter +=1
                         columnInfo = column.get_text(strip=True)
                         homeworksInfos.append(columnInfo)
@@ -193,7 +195,6 @@ def writeScheduleInExcel(calendar):
         idxRow += 1
 
     book.save(filename)
-    #print(myCalendar.coursesList[3].homeworksList[4].getName())
 
 if __name__ == '__main__':
     myCalendar = evaluationsScraper()
