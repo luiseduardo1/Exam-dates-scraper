@@ -84,14 +84,20 @@ def evaluationsScraper():
                        # Text is encoded in utf-8 so that the regex can work
                         if re.match(EXAM_HOMEWORK, (column.text).encode('utf-8')):
                             examCounter += 1
-                        columnInfo = column.get_text(strip=True)
-                        examsInfos.append(columnInfo)
+                        if re.match('Local',(column.text).encode('utf-8')):
+                            localInfo = (column.get_text().encode('utf-8')).split(": ")
+                            columnInfo = localInfo[1]
+                            examsInfos.append(columnInfo)
+                        else:
+                            columnInfo = column.get_text(strip=True)
+                            examsInfos.append(columnInfo)
 
                 # Getting name, date, period, value
                 for nbExam in range(examCounter):
                     exam = Exam.Exam(examsInfos[0+(nbExam)*16], 
                                      examsInfos[2+(nbExam)*16], 
                                      examsInfos[3+(nbExam)*16],
+                                     examsInfos[5+(nbExam)*16],
                                      examsInfos[10+(nbExam)*16])
                     myCourse.examsList.append(exam) 
 
@@ -133,13 +139,16 @@ def writeScheduleInExcel(calendar):
     book = xlwt.Workbook(encoding='utf-8')
     sheet = book.add_sheet("Dates d'évaluation")
 
-    firstColWidth = 256 * 32     # 32 characters wide
-    othersColWidth = 256 * 15     # 15 characters wide
+    firstColWidth = 256 * 27     # 27 characters wide
+    othersColWidth = 256 * 15    # 15 characters wide
+    valueColWidth = 256 * 13     # 13 characters wide 
     
     try:
         for i in itertools.count():
             if (i == 0):
                 sheet.col(i).width = firstColWidth
+            elif (i == 3):
+                sheet.col(i).width = valueColWidth
             else:
                 sheet.col(i).width = othersColWidth
 
@@ -152,7 +161,8 @@ def writeScheduleInExcel(calendar):
     homeworkCol1 = "Travaux d'évaluation: "
     homeworkCol2 = 'Date de remise:'
     homeworkCol3 = 'Heure de remise:'
-    valueCol4 = 'Pourcentage' #TODO : Add pourcentage to exam/hw attributes
+    localCol = 'Local: '
+    valueCol4 = 'Pourcentage' 
 
     sheet.write(0,0, 'Université Laval', style0)
     sheet.write(1,0, 'Session: Automne 2015', style0) #TODO : Write automatically the actual semester
@@ -167,6 +177,7 @@ def writeScheduleInExcel(calendar):
         sheet.write(idxRow,1, examCol2, style0)
         sheet.write(idxRow,2, examCol3, style0)
         sheet.write(idxRow,3, valueCol4, style0)
+        sheet.write(idxRow,4, localCol, style0)
         idxRow += 1
         
         for exam in course.examsList:
@@ -174,6 +185,7 @@ def writeScheduleInExcel(calendar):
             sheet.write(idxRow,1, exam.getDate())
             sheet.write(idxRow,2, exam.getTimePeriod())
             sheet.write(idxRow,3, exam.getValue())
+            sheet.write(idxRow,4, exam.getLocal())
             idxRow += 1 
         
         if course.homeworksList:
