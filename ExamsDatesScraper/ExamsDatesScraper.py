@@ -131,7 +131,7 @@ def evaluationsScraper():
 
 def writeScheduleInExcel(calendar):
 
-    filename = 'ExamsCalendrier.xls'
+    filename = 'Calendar/ExamsCalendrier.xls'
     myCalendar = calendar
 
     style0 = xlwt.easyxf('font:name Arial, color-index black, bold on')
@@ -139,14 +139,17 @@ def writeScheduleInExcel(calendar):
     book = xlwt.Workbook(encoding='utf-8')
     sheet = book.add_sheet("Dates d'évaluation")
 
-    firstColWidth = 256 * 27     # 27 characters wide
-    othersColWidth = 256 * 15    # 15 characters wide
-    valueColWidth = 256 * 13     # 13 characters wide 
+    firstColWidth = 256 * 25     # 25 characters wide
+    valueColWidth = 256 * 8      # 8 characters wide 
+    hourColWidth = 256 * 16      # 16 characters wide 
+    othersColWidth = 256 * 14    # 14 characters wide
     
     try:
         for i in itertools.count():
             if (i == 0):
                 sheet.col(i).width = firstColWidth
+            elif (i == 2):
+                sheet.col(i).width = hourColWidth
             elif (i == 3):
                 sheet.col(i).width = valueColWidth
             else:
@@ -162,7 +165,7 @@ def writeScheduleInExcel(calendar):
     homeworkCol2 = 'Date de remise:'
     homeworkCol3 = 'Heure de remise:'
     localCol = 'Local: '
-    valueCol4 = 'Pourcentage' 
+    valueCol4 = 'Valeur: ' 
 
     sheet.write(0,0, 'Université Laval', style0)
     sheet.write(1,0, 'Session: Automne 2015', style0) #TODO : Write automatically the actual semester
