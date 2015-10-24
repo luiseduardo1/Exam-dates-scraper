@@ -65,7 +65,7 @@ def evaluationsScraper():
         soup = BeautifulSoup(classurl, "lxml")
 
         courseName = soup.find('td', {"class":"Boite_Entete_Popup_Texte"}).text
-        myCourse = Course.Course(courseName)
+        myCourse = Course.Course(courseName.encode('utf-8'))
 
         examCounter = 0
         homeworkCounter = 0
@@ -90,7 +90,7 @@ def evaluationsScraper():
                             examsInfos.append(columnInfo)
                         else:
                             columnInfo = column.get_text(strip=True)
-                            examsInfos.append(columnInfo)
+                            examsInfos.append(columnInfo.encode('utf-8'))
 
                 # Getting name, date, period, value
                 for nbExam in range(examCounter):
@@ -111,7 +111,7 @@ def evaluationsScraper():
                         if re.match(EXAM_HOMEWORK, (column.text).encode('utf-8')):
                             homeworkCounter +=1
                         columnInfo = column.get_text(strip=True)
-                        homeworksInfos.append(columnInfo)
+                        homeworksInfos.append(columnInfo.encode('utf-8'))
 
                 # Getting name, date, period, value
                 for nbHomework in range(homeworkCounter):
