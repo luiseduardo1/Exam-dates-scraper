@@ -125,7 +125,7 @@ def evaluationsScraper():
         myCalendar.coursesList.append(myCourse)
         courseCounter += 1
 
-    print "The dates of your exams and homeworks have been well recuperated!"
+    print ("The dates of your exams and homeworks have been well recuperated!")
     return myCalendar
 
 
@@ -141,7 +141,7 @@ def writeScheduleInExcel(calendar):
 
     firstColWidth = 256 * 25     # 25 characters wide
     valueColWidth = 256 * 8      # 8 characters wide 
-    hourColWidth = 256 * 16      # 16 characters wide 
+    hourColWidth = 256 * 13      # 13 characters wide 
     othersColWidth = 256 * 14    # 14 characters wide
     
     try:
@@ -163,7 +163,7 @@ def writeScheduleInExcel(calendar):
     examCol3 = 'Heure:'
     homeworkCol1 = "Travaux d'évaluation: "
     homeworkCol2 = 'Date de remise:'
-    homeworkCol3 = 'Heure de remise:'
+    homeworkCol3 = 'Heure limite:'
     localCol = 'Local: '
     valueCol4 = 'Valeur: ' 
 
