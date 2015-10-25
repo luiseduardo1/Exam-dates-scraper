@@ -25,6 +25,8 @@ Logging into your account ...
 The dates of your exams and homeworks have been well recuperated!
 ```
 Once you're done, it will create a excel file "ExamsCalendrier.xls".
+It will look like this:
+![Example](/Doc/Example_ExamsCalendrier.png)
 
 ## TODO:
 Export the dates of the exams and homeworks of each course object contained in myCalendar to a real calendar.
